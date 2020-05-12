@@ -7,12 +7,11 @@ public class RandomNumGen {
 
     static double random_double(){
         Random random = new Random();
-        double rand_double = random.nextDouble();
-        return rand_double;
+        return random.nextDouble();
+
     }
 
     static double random_double_within_interval(double rangeMin, double rangeMax){
-        double rand_double = ThreadLocalRandom.current().nextDouble(rangeMin, rangeMax);
-        return rand_double;
+        return ThreadLocalRandom.current().nextDouble(rangeMin, rangeMax);
     }
 }

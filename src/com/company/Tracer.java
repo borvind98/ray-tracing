@@ -13,6 +13,7 @@ public class Tracer {
     int multiSample, imgHeight, imgWidth, maxDepth;
     double aspectRatio;
 
+
     Tracer(double aspectRatio, int imgWidth, int imgHeight, int msaa, int maxDepth) {
         this.aspectRatio = aspectRatio;
         this.imgHeight = imgHeight;
@@ -63,6 +64,8 @@ public class Tracer {
         } catch (Exception e) {
             return;
         }
+
+        color.writeColors();
     }
 
     void trace(int start, int end, int ind) {
@@ -85,7 +88,8 @@ public class Tracer {
                     Ray r = cam.getRay(u, v);
                     pixel_col.add(ray_color(r, world, maxDepth));
                 }
-                color.writeColor(pixel_col, multiSample, j, i);
+
+                color.setColor(pixel_col, multiSample, j, i);
             }
         }
     }

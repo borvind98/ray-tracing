@@ -9,18 +9,21 @@ public class Color {
 
     // Create buffered image object
     BufferedImage img;
-    int imgHeight;
+    int imgHeight, imgWidth;
     Extra ex;
     // file object
     File f;
 
+    int[][] pixels;
+
     Color(int imgWidth, int imgHeight){
-        img = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_ARGB);
+        this.imgWidth = imgWidth;
         this.imgHeight = imgHeight;
         ex = new Extra();
+        pixels = new int[imgHeight][imgWidth];
     }
 
-    void writeColor(Vec3 pixel_color, int samples_per_pixel, int j, int i){
+    void setColor(Vec3 pixel_color, int samples_per_pixel, int j, int i){
         float r = pixel_color.x();
         float g = pixel_color.y();
         float b = pixel_color.z();
@@ -37,7 +40,19 @@ public class Color {
 
         int p = (a << 24) | (ir << 16) | (ig << 8) | ib; //pixel
 
-        img.setRGB(i, imgHeight - j - 1, p);
+        pixels[j][i] = p;
+
+    }
+
+    void writeColors(){
+
+        img = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_ARGB);
+
+        for (int j = 0; j < imgHeight; j++) {
+            for (int i = 0; i < imgWidth; i++) {
+                img.setRGB(i, imgHeight - j - 1, pixels[j][i]);
+            }
+        }
 
         // write image
         try {

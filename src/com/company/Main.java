@@ -8,9 +8,9 @@ public class Main {
         // write your code here
 
         double aspectRatio = 16.0 / 9.0;
-        int imgWidth = 240;
+        int imgWidth = 2160;
         int imgHeight = (int) (imgWidth / aspectRatio);
-        int msaa = 1000;
+        int msaa = 150;
         int maxDepth = 120;
 
         Tracer tracer = new Tracer(aspectRatio, imgWidth, imgHeight, msaa, maxDepth);
