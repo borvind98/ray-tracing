@@ -9,17 +9,17 @@ public class Camera {
 
     Camera(double aspectRatio){
 
-        float horizontalWidth = 4.0f;
-        float verticalHeigth = (float) (horizontalWidth /aspectRatio);
+        double horizontalWidth = 4.0f;
+        double verticalHeigth = (horizontalWidth /aspectRatio);
 
-        lower_left_corner = new Vec3(-2.0f, -1.0f, -1.0f);
-        horizontal = new Vec3(horizontalWidth, 0.0f, 0.0f);
-        vertical = new Vec3(0.0f, verticalHeigth, 0.0f);
-        origin = new Vec3(0.0f, 0.0f, 0.0f);
+        lower_left_corner = new Vec3(-2.0, -1.0, -1.0);
+        horizontal = new Vec3(horizontalWidth, 0.0, 0.0);
+        vertical = new Vec3(0.0, verticalHeigth, 0.0);
+        origin = new Vec3(0.0, 0.0, 0.0);
     }
 
     Ray getRay(double u, double v){
-        Vec3 vec = Vec3.vec_minus(Vec3.vec_plus(lower_left_corner, Vec3.vec_plus(Vec3.vec_mul_t(horizontal, (float)u), Vec3.vec_mul_t(vertical, (float)v))), origin);
+        Vec3 vec = Vec3.vec_minus(Vec3.vec_plus(lower_left_corner, Vec3.vec_plus(Vec3.vec_mul_t(horizontal, u), Vec3.vec_mul_t(vertical, v))), origin);
         return new Ray(origin, vec);
     }
 }

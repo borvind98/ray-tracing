@@ -17,7 +17,7 @@ public class Ray {
         return B;
     }
 
-    Vec3 point_at_parameter(float t) {
+    Vec3 point_at_parameter(double t) {
         return Vec3.vec_plus(A, Vec3.vec_mul_t(B, t));
     }
 

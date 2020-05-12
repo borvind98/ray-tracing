@@ -24,18 +24,18 @@ public class Color {
     }
 
     void setColor(Vec3 pixel_color, int samples_per_pixel, int j, int i){
-        float r = pixel_color.x();
-        float g = pixel_color.y();
-        float b = pixel_color.z();
+        double r = pixel_color.x();
+        double g = pixel_color.y();
+        double b = pixel_color.z();
 
-        float scale = 1.0f / samples_per_pixel;
-        r = (float) Math.sqrt(scale*r);
-        g = (float) Math.sqrt(scale*g);
-        b = (float) Math.sqrt(scale*b);
+        double scale = 1.0 / samples_per_pixel;
+        r = Math.sqrt(scale*r);
+        g = Math.sqrt(scale*g);
+        b = Math.sqrt(scale*b);
 
-        int ir = (int) (256.99f * ex.clamp(r, 0.0, 0.999));
-        int ig = (int) (255.99f * ex.clamp(g, 0.0, 0.999));
-        int ib = (int) (255.99f * ex.clamp(b, 0.0, 0.999));
+        int ir = (int) (256.99 * ex.clamp(r, 0.0, 0.999));
+        int ig = (int) (255.99 * ex.clamp(g, 0.0, 0.999));
+        int ib = (int) (255.99 * ex.clamp(b, 0.0, 0.999));
         int a = 255;
 
         int p = (a << 24) | (ir << 16) | (ig << 8) | ib; //pixel

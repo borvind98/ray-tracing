@@ -22,11 +22,11 @@ public class Tracer {
         this.maxDepth = maxDepth;
         list = new Hitable[4];
 
-        //list[0] = new Sphere(new Vec3(0,0,-1), 0.5f, new Dielectrics(new Vec3(0.7f, 0.3f, 0.3f)));
-        list[0] = new Sphere(new Vec3(0, 0, -1), 0.5f, new Dielectrics(1.5f));
-        list[1] = new Sphere(new Vec3(0, -100.5f, -1), 100, new Lambertian(new Vec3(0.8f, 0.8f, 0.0f)));
-        list[2] = new Sphere(new Vec3(1, 0, -1), 0.5f, new Metal(new Vec3(0.8f, 0.6f, 0.2f), 1.0f));
-        list[3] = new Sphere(new Vec3(-1, 0, -1), 0.5f, new Metal(new Vec3(0.8f, 0.8f, 0.8f), 0.3f));
+        //list[0] = new Sphere(new Vec3(0,0,-1), 0.5, new Dielectrics(new Vec3(0.7, 0.3, 0.3)));
+        list[0] = new Sphere(new Vec3(0, 0, -1), 0.5, new Dielectrics(1.5));
+        list[1] = new Sphere(new Vec3(0, -100.5, -1), 100, new Lambertian(new Vec3(0.8, 0.8, 0.0)));
+        list[2] = new Sphere(new Vec3(1, 0, -1), 0.5, new Metal(new Vec3(0.8, 0.6, 0.2), 1.0));
+        list[3] = new Sphere(new Vec3(-1, 0, -1), 0.5, new Metal(new Vec3(0.8, 0.8, 0.8), 0.3));
         world = new HitableList(list);
 
         cam = new Camera(aspectRatio);
@@ -75,14 +75,14 @@ public class Tracer {
             for (int i = 0; i < imgWidth; i++) {
                 Vec3 pixel_col = new Vec3(0, 0, 0);
                 for (int s = 0; s < multiSample; s++) {
-                    float u;
-                    float v;
+                    double u;
+                    double v;
                     if (multiSample == 1) {
-                        u = (float) (i) / (imgWidth - 1);
-                        v = (float) (j) / (imgHeight - 1);
+                        u =  (double) (i) / (imgWidth - 1);
+                        v =  (double) (j) / (imgHeight - 1);
                     } else {
-                        u = (float) (i + RandomNumGen.random_double()) / (imgWidth - 1);
-                        v = (float) (j + RandomNumGen.random_double()) / (imgHeight - 1);
+                        u =  (i + RandomNumGen.random_double()) / (imgWidth - 1);
+                        v =  (j + RandomNumGen.random_double()) / (imgHeight - 1);
                     }
 
                     Ray r = cam.getRay(u, v);
@@ -100,7 +100,7 @@ public class Tracer {
             return new Vec3(0, 0, 0);
         }
 
-        if (world.hit(r, 0.001f, Float.MAX_VALUE, rec)) {
+        if (world.hit(r, 0.001f, Double.MAX_VALUE, rec)) {
             Ray scattered = new Ray(new Vec3(0, 0, 0), new Vec3(0, 0, 0));
             Vec3 attenuation = new Vec3(0, 0, 0);
             if (rec.material.scatter(r, rec, attenuation, scattered)) {
@@ -109,11 +109,11 @@ public class Tracer {
             return new Vec3(0, 0, 0);
         } else {
             Vec3 unit_direction = Vec3.unit_vector(r.direction());
-            float t = 0.5f * (unit_direction.y() + 1.0f);
-            Vec3 v1 = new Vec3(1.0f, 1.0f, 1.0f);
-            Vec3 v2 = new Vec3(0.5f, 0.7f, 1.0f);
+            double t = 0.5 * (unit_direction.y() + 1.0);
+            Vec3 v1 = new Vec3(1.0, 1.0, 1.0);
+            Vec3 v2 = new Vec3(0.5, 0.7, 1.0);
 
-            return Vec3.vec_plus(v1.mul_t(1.0f - t), v2.mul_t(t));
+            return Vec3.vec_plus(v1.mul_t(1.0 - t), v2.mul_t(t));
         }
     }
 

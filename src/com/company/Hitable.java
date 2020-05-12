@@ -2,7 +2,7 @@ package com.company;
 
 class HitRecord {
 
-    float t = 0;
+    double t = 0;
     Vec3 p = new Vec3(0, 0, 0);
     Vec3 normal = new Vec3(0, 0, 0);
     boolean frontFace;
@@ -22,7 +22,7 @@ class HitRecord {
 
 public abstract class Hitable {
 
-    boolean hit(Ray r, float t_min, float t_max, HitRecord rec) {
+    boolean hit(Ray r, double t_min, double t_max, HitRecord rec) {
         return true;
     }
 }

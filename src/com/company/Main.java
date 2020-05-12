@@ -8,10 +8,10 @@ public class Main {
         // write your code here
 
         double aspectRatio = 16.0 / 9.0;
-        int imgWidth = 2160;
+        int imgWidth = 1920;
         int imgHeight = (int) (imgWidth / aspectRatio);
-        int msaa = 150;
-        int maxDepth = 120;
+        int msaa = 200;
+        int maxDepth = 200;
 
         Tracer tracer = new Tracer(aspectRatio, imgWidth, imgHeight, msaa, maxDepth);
         double seqStart = System.nanoTime();

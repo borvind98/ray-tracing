@@ -28,9 +28,9 @@ class Lambertian extends Material{
 class Metal extends Material{
 
     Vec3 albedo;
-    float fuzz;
+    double fuzz;
 
-    Metal(Vec3 col, float f){
+    Metal(Vec3 col, double f){
         this.albedo = col;
         if(f < 1){
             this.fuzz = f;
@@ -51,23 +51,23 @@ class Metal extends Material{
 }
 
 class Dielectrics extends Material{
-    float refIdx;
+    double refIdx;
 
-    Dielectrics(float ri){
+    Dielectrics(double ri){
         this.refIdx = ri;
 
     }
 
     boolean scatter(Ray rIn, HitRecord rec, Vec3 attenuation, Ray scattered){
 
-        attenuation.set(new Vec3(1.0f, 1.0f, 1.0f));
+        attenuation.set(new Vec3(1.0, 1.0, 1.0));
         double etaiOverEtat = refIdx;
         if(rec.frontFace){
-            etaiOverEtat = 1.0f / refIdx;
+            etaiOverEtat = 1.0 / refIdx;
         }
 
         Vec3 unitDirection = Vec3.unit_vector(rIn.direction());
-        double cosTheta = Math.min(Vec3.dot(Vec3.vec_minus(new Vec3(0,0,0), unitDirection), rec.normal), 1.0f);
+        double cosTheta = Math.min(Vec3.dot(Vec3.vec_minus(new Vec3(0,0,0), unitDirection), rec.normal), 1.0);
         double sinTheta = Math.sqrt(1.0f - cosTheta*cosTheta);
         if(etaiOverEtat * sinTheta > 1.0){
             Vec3 reflected = Vec3.reflect(unitDirection, rec.normal);
@@ -77,5 +77,9 @@ class Dielectrics extends Material{
         Vec3 refracted = Vec3.refract(unitDirection, rec.normal, etaiOverEtat);
         scattered.set(rec.p, refracted);
         return true;
+    }
+
+    double schlick(double cosine, double r){
+        return 0;
     }
 }
