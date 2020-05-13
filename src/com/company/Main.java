@@ -8,16 +8,16 @@ public class Main {
         // write your code here
 
         double aspectRatio = 16.0 / 9.0;
-        int imgWidth = 500;
+        int imgWidth = 1280;
         int imgHeight = (int) (imgWidth / aspectRatio);
-        int msaa = 10;
+        int msaa = 400;
         int maxDepth = 200;
         int vfov = 20;
-        Vec3 lookFrom = new Vec3(0, 1, 4);
-        Vec3 lookAt = new Vec3(0,0,-1);
+        Vec3 lookFrom = new Vec3(13, 2, 3);
+        Vec3 lookAt = new Vec3(4,1,0);
         Vec3 vUp = new Vec3(0, 1, 0);
-        double distToFocus = Vec3.vec_minus(lookFrom,lookAt).length();
-        double aperture = 2.0;
+        double distToFocus = lookFrom.vecMinus(lookAt).length();
+        double aperture = 0.1;
 
         Camera cam = new Camera(vfov, aspectRatio, lookFrom, lookAt, vUp, distToFocus, aperture);
 

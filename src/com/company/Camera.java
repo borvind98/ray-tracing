@@ -19,22 +19,21 @@ public class Camera {
         double halfWidth = aspectRatio * halfHeight;
 
 
-        w = Vec3.unit_vector(Vec3.vec_minus(lookFrom, lookAt));
-        u = Vec3.unit_vector(Vec3.cross(vUp, w));
+        w = Vec3.unit_vector(lookFrom.vecMinus(lookAt));
+        u = Vec3.unit_vector(vUp.cross(w));
         v = Vec3.cross(w, u);
 
-        lower_left_corner = Vec3.vec_minus(origin, Vec3.vec_minus(Vec3.vec_mul_t(u, halfWidth), Vec3.vec_minus(Vec3.vec_mul_t(v, halfHeight), w)));
+        lower_left_corner = origin.vecMinus(u.mul_t(halfWidth*focusDist)).vecMinus(v.mul_t(halfHeight*focusDist)).vecMinus(w.mul_t(focusDist));
 
-        horizontal = Vec3.vec_mul_t(u, 2*halfWidth*focusDist);
-        vertical = Vec3.vec_mul_t(v, 2*halfWidth*focusDist);
+        horizontal = u.vecMulT(2*halfWidth*focusDist);
+        vertical = v.vecMulT(2*halfWidth*focusDist);
 
     }
 
     Ray getRay(double s, double t){
-        Vec3 rd = Vec3.vec_mul_t(Vec3.randomInUnitDisk(), lensRadius);
-        Vec3 offset = Vec3.vec_plus(Vec3.vec_mul_t(u, rd.x()), Vec3.vec_mul_t(v, rd.y()));
-
-        Vec3 vec = Vec3.vec_minus(Vec3.vec_minus(Vec3.vec_plus(lower_left_corner, Vec3.vec_plus(Vec3.vec_mul_t(horizontal, s), Vec3.vec_mul_t(vertical, t))), origin), offset);
-        return new Ray(Vec3.vec_plus(origin, offset), vec);
+        Vec3 rd = Vec3.randomInUnitDisk().vecMulT(lensRadius);
+        Vec3 offset = u.vecMulT(rd.x()).vecPlus(v.vecMulT(rd.y()));
+        Vec3 vec = lower_left_corner.vecPlus(horizontal.vecMulT(s)).vecPlus(vertical.vecMulT(t)).vecMinus(origin).vecMinus(offset);
+        return new Ray(origin.vecPlus(offset), vec);
     }
 }

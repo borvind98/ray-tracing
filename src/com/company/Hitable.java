@@ -9,7 +9,7 @@ class HitRecord {
     Material material;
 
     void setFaceNormal(Ray r, Vec3 outwardNormal){
-        frontFace = (Vec3.dot(r.direction(), outwardNormal) < 0);
+        frontFace = (r.direction().dot(outwardNormal) < 0);
         if(frontFace){
             normal = outwardNormal;
         }

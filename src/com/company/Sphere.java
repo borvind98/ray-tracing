@@ -14,9 +14,9 @@ public class Sphere extends Hitable {
 
     boolean hit(Ray r, double t_min, double t_max, HitRecord rec) {
         Vec3 oc = Vec3.vec_minus(r.origin(), center);
-        double a = Vec3.dot(r.direction(), r.direction());
-        double b = Vec3.dot(oc, r.direction());
-        double c = Vec3.dot(oc, oc) - radius * radius;
+        double a = r.direction().dot(r.direction());
+        double b = oc.dot(r.direction());
+        double c = oc.dot(oc) - radius * radius;
         double discriminant = b * b - a * c;
         if (discriminant > 0) {
             double temp = ((-b - Math.sqrt(discriminant))/a);

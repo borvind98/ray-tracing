@@ -32,6 +32,44 @@ public class Vec3 {
         this.e2 = v.e2;
     }
 
+    Vec3 vecPlus(Vec3 v2){
+        return new Vec3(this.e0 + v2.e0, this.e1 + v2.e1, this.e2 + v2.e2);
+    }
+
+    Vec3 vecMinus(Vec3 v2){
+        return new Vec3(this.e0 - v2.e0, this.e1 - v2.e1, this.e2 - v2.e2);
+    }
+
+    Vec3 vecMul(Vec3 v2){
+        return new Vec3(this.e0 * v2.e0, this.e1 * v2.e1, this.e2 * v2.e2);
+    }
+
+    Vec3 vecDiv(Vec3 v2){
+        return new Vec3(this.e0 / v2.e0, this.e1 / v2.e1, this.e2 / v2.e2);
+    }
+
+    Vec3 vecPlusT(double t){
+        return new Vec3(this.e0 + t, this.e1 + t, this.e2 + t);
+    }
+
+    Vec3 vecMinusT(double t){
+        return new Vec3(this.e0 - t, this.e1 - t, this.e2 - t);
+    }
+
+    Vec3 vecMulT(double t){
+        return new Vec3(this.e0 * t, this.e1 * t, this.e2 * t);
+    }
+
+    Vec3 vecDivT(double t){
+        return new Vec3(this.e0 / t, this.e1 / t, this.e2 / t);
+    }
+
+    Vec3 cross(Vec3 v2){
+        return new Vec3( (this.e1*v2.e2 - this.e2*v2.e1),
+                (-(this.e0*v2.e2 - this.e2*v2.e0)),
+                (this.e0*v2.e1 - this.e1*v2.e0));
+    }
+
     static Vec3 vec_plus(Vec3 v1, Vec3 v2){
         return new Vec3(v1.e0 + v2.e0, v1.e1 + v2.e1, v1.e2 + v2.e2);
     }
@@ -64,12 +102,12 @@ public class Vec3 {
         return new Vec3(v.e0 / t, v.e1 / t, v.e2 / t);
     }
 
-    static double dot(Vec3 v1, Vec3 v2){
-        return v1.e0 * v2.e0 + v1.e1 * v2.e1 + v1.e2 * v2.e2;
+    double dot(Vec3 v2){
+        return this.e0 * v2.e0 + this.e1 * v2.e1 + this.e2 * v2.e2;
     }
 
     static Vec3 cross(Vec3 v1, Vec3 v2){
-        return new Vec3( (v1.e1*v2.e2 - v1.e2*v2.e1),
+        return new Vec3((v1.e1*v2.e2 - v1.e2*v2.e1),
                         (-(v1.e0*v2.e2 - v1.e2*v2.e0)),
                         (v1.e0*v2.e1 - v1.e1*v2.e0));
     }
@@ -110,7 +148,7 @@ public class Vec3 {
     }
 
     Vec3 div_t(double t){
-        double k = 1.0f/t;
+        double k = 1.0/t;
 
         this.e0 *= k;
         this.e1 *= k;
@@ -118,8 +156,20 @@ public class Vec3 {
         return this;
     }
 
+    Vec3 mulT(double t){
+        this.e0 *= t;
+        this.e1 *= t;
+        this.e2 *= t;
+        return this;
+    }
+
+    Vec3 divT(double t){
+        double k = 1.0/t;
+        return new Vec3(this.e0 * k, this.e1 * k, this.e2 * k);
+    }
+
     static Vec3 unit_vector(Vec3 v){
-        return v.div_t(v.length());
+        return v.divT(v.length());
     }
 
     static Vec3 randomUnitVector(){
@@ -154,14 +204,13 @@ public class Vec3 {
     }
 
     static Vec3 reflect(Vec3 v, Vec3 n){
-        return Vec3.vec_minus(v, Vec3.vec_mul_t(Vec3.vec_mul_t(n, Vec3.dot(v,n)),2));
+        return v.vecMinus(n.vecMulT(2*v.dot(n)));
     }
 
     static Vec3 refract(Vec3 uv, Vec3 n, double etaiOverEtat){
-        double cosTheta = dot(new Vec3(0,0,0).sub(uv), n);
-        Vec3.vec_mul_t(n, cosTheta);
-        Vec3 rOutParallel = Vec3.vec_mul_t(Vec3.vec_plus(uv, Vec3.vec_mul_t(n, cosTheta)), etaiOverEtat);
-        Vec3 rOutPerp = Vec3.vec_mul_t(n, - Math.sqrt(1.0 - rOutParallel.squared_length()));
+        double cosTheta = new Vec3(0,0,0).vecMinus(uv).dot(n);
+        Vec3 rOutParallel = uv.vecPlus(n.vecMulT(cosTheta)).vecMulT(etaiOverEtat);
+        Vec3 rOutPerp = n.vecMulT(-Math.sqrt(1.0 - rOutParallel.squared_length()));
         return vec_plus(rOutParallel, rOutPerp);
     }
 

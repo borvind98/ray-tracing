@@ -45,7 +45,7 @@ class Metal extends Material{
         Vec3 reflected = Vec3.reflect(Vec3.unit_vector(rIn.direction()), rec.normal);
         scattered.set(rec.p, Vec3.vec_plus(reflected, Vec3.vec_mul_t(Vec3.randomUnitVector(), fuzz)));
         attenuation.set(albedo);
-        return (Vec3.dot(scattered.direction(), rec.normal) > 0);
+        return (scattered.direction().dot(rec.normal) > 0);
     }
 
 }
@@ -67,7 +67,7 @@ class Dielectrics extends Material{
         }
 
         Vec3 unitDirection = Vec3.unit_vector(rIn.direction());
-        double cosTheta = Math.min(Vec3.dot(Vec3.vec_minus(new Vec3(0,0,0), unitDirection), rec.normal), 1.0);
+        double cosTheta = Math.min(new Vec3(0,0,0).vecMinus(unitDirection).dot(rec.normal), 1.0);
         double sinTheta = Math.sqrt(1.0f - cosTheta*cosTheta);
         if(etaiOverEtat * sinTheta > 1.0){
             Vec3 reflected = Vec3.reflect(unitDirection, rec.normal);

@@ -21,7 +21,7 @@ public class Tracer {
         this.maxDepth = maxDepth;
 
         color = new Color(imgWidth, imgHeight);
-        int hitWidth = 10;
+        int hitWidth = 12;
         generateWorld(hitWidth);
 
     }
@@ -29,10 +29,10 @@ public class Tracer {
     void generateWorld(int hitWidth){
 
         list = new ArrayList<>();
-        //list[0] = new Sphere(new Vec3(0, 0, -1), 0.5, new Dielectrics(1.5));
-        list.add(new Sphere(new Vec3(0, -1000, 0), 1000, new Lambertian(new Vec3(0.5, 0.5, 0.5))));
-        //list[2] = new Sphere(new Vec3(R, 0, -1), R, new Metal(new Vec3(0.8, 0.6, 0.2), 1.0));
-        //list[3] = new Sphere(new Vec3(-R, 0, -1), R, new Metal(new Vec3(0.8, 0.8, 0.8), 0.3));
+        list.add(new Sphere(new Vec3(0, 1, -1), 1, new Dielectrics(1.5)));
+        list.add(new Sphere(new Vec3(0, -100000, 0), 100000, new Lambertian(new Vec3(0.5, 0.5, 0.5))));
+        list.add(new Sphere(new Vec3(2, 0, -1), 1, new Metal(new Vec3(0.8, 0.6, 0.2), 1.0)));
+        list.add(new Sphere(new Vec3(-2, 0, -1), 1, new Metal(new Vec3(0.8, 0.8, 0.8), 0.3)));
 
         for (int j = -hitWidth; j < hitWidth; j++) {
             for (int k = -hitWidth; k < hitWidth; k++) {
@@ -67,12 +67,12 @@ public class Tracer {
 
         Thread[] threads = new Thread[numOfCores];
         CyclicBarrier barrier = new CyclicBarrier(numOfCores);
-        int partToSplit = imgHeight / numOfCores;
-        int rest = imgHeight % numOfCores;
+        int partToSplit = imgWidth / numOfCores;
+        int rest = imgWidth % numOfCores;
         for (int i = 0; i < numOfCores; i++) {
             if (i == numOfCores - 1) {
                 int start = (i * partToSplit);
-                int end = imgHeight;
+                int end = imgWidth;
                 Thread t = new Thread(new Para(i, start, end, barrier, numOfCores));
                 threads[i] = t;
                 t.start();
@@ -97,10 +97,10 @@ public class Tracer {
     }
 
     void trace(int start, int end, int ind) {
-        for (int j = start; j < end; j++) {
-            int remaining = end - j;
+        for (int j = 0; j < imgHeight; j++) {
+            int remaining = imgHeight - j;
             System.out.println("Thread: " + ind + " | Scanlines remaining: " + remaining);
-            for (int i = 0; i < imgWidth; i++) {
+            for (int i = start; i < end; i++) {
                 Vec3 pixel_col = new Vec3(0, 0, 0);
                 for (int s = 0; s < multiSample; s++) {
                     double u;
@@ -132,7 +132,7 @@ public class Tracer {
             Ray scattered = new Ray(new Vec3(0, 0, 0), new Vec3(0, 0, 0));
             Vec3 attenuation = new Vec3(0, 0, 0);
             if (rec.material.scatter(r, rec, attenuation, scattered)) {
-                return Vec3.vec_mul(attenuation, ray_color(scattered, world, depth - 1));
+                return attenuation.vecMul(ray_color(scattered, world, depth-1));
             }
             return new Vec3(0, 0, 0);
         } else {
@@ -141,7 +141,7 @@ public class Tracer {
             Vec3 v1 = new Vec3(1.0, 1.0, 1.0);
             Vec3 v2 = new Vec3(0.5, 0.7, 1.0);
 
-            return Vec3.vec_plus(v1.mul_t(1.0 - t), v2.mul_t(t));
+            return v1.vecMulT(1-t).vecPlus(v2.vecMulT(t));
         }
     }
 
