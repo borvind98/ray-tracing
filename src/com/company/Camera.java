@@ -21,12 +21,12 @@ public class Camera {
 
         w = Vec3.unit_vector(lookFrom.vecMinus(lookAt));
         u = Vec3.unit_vector(vUp.cross(w));
-        v = Vec3.cross(w, u);
+        v = w.cross(u);
 
-        lower_left_corner = origin.vecMinus(u.mul_t(halfWidth*focusDist)).vecMinus(v.mul_t(halfHeight*focusDist)).vecMinus(w.mul_t(focusDist));
+        lower_left_corner = origin.vecMinus(u.vecMulT(halfWidth*focusDist)).vecMinus(v.vecMulT(halfHeight*focusDist)).vecMinus(w.vecMulT(focusDist));
 
         horizontal = u.vecMulT(2*halfWidth*focusDist);
-        vertical = v.vecMulT(2*halfWidth*focusDist);
+        vertical = v.vecMulT(2*halfHeight*focusDist);
 
     }
 

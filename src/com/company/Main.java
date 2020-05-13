@@ -8,9 +8,9 @@ public class Main {
         // write your code here
 
         double aspectRatio = 16.0 / 9.0;
-        int imgWidth = 1280;
+        int imgWidth = 1920;
         int imgHeight = (int) (imgWidth / aspectRatio);
-        int msaa = 400;
+        int msaa = 300;
         int maxDepth = 200;
         int vfov = 20;
         Vec3 lookFrom = new Vec3(13, 2, 3);

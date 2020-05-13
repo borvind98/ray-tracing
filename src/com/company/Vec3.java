@@ -21,11 +21,6 @@ public class Vec3 {
         return e0*e0 + e1*e1 + e2*e2;
     }
 
-    void make_unit_vector(){
-        double k = (1.0f /Math.sqrt(e0*e0 + e1*e1 + e2*e2));
-        e0 *= k; e1 *= k; e2 *= k;
-    }
-
     void set(Vec3 v){
         this.e0 = v.e0;
         this.e1 = v.e1;
@@ -65,7 +60,7 @@ public class Vec3 {
     }
 
     Vec3 cross(Vec3 v2){
-        return new Vec3( (this.e1*v2.e2 - this.e2*v2.e1),
+        return new Vec3((this.e1*v2.e2 - this.e2*v2.e1),
                 (-(this.e0*v2.e2 - this.e2*v2.e0)),
                 (this.e0*v2.e1 - this.e1*v2.e0));
     }
@@ -104,12 +99,6 @@ public class Vec3 {
 
     double dot(Vec3 v2){
         return this.e0 * v2.e0 + this.e1 * v2.e1 + this.e2 * v2.e2;
-    }
-
-    static Vec3 cross(Vec3 v1, Vec3 v2){
-        return new Vec3((v1.e1*v2.e2 - v1.e2*v2.e1),
-                        (-(v1.e0*v2.e2 - v1.e2*v2.e0)),
-                        (v1.e0*v2.e1 - v1.e1*v2.e0));
     }
 
     Vec3 add(Vec3 v){
