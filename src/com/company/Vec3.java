@@ -12,9 +12,6 @@ public class Vec3 {
     double x() { return e0;}
     double y() { return e1;}
     double z() { return e2;}
-    double r() { return e0;}
-    double g() { return e1;}
-    double b() { return e2;}
 
     double length(){
         return Math.sqrt(e0*e0 + e1*e1 + e2*e2);
@@ -71,7 +68,7 @@ public class Vec3 {
         return v1.e0 * v2.e0 + v1.e1 * v2.e1 + v1.e2 * v2.e2;
     }
 
-    Vec3 cross(Vec3 v1, Vec3 v2){
+    static Vec3 cross(Vec3 v1, Vec3 v2){
         return new Vec3( (v1.e1*v2.e2 - v1.e2*v2.e1),
                         (-(v1.e0*v2.e2 - v1.e2*v2.e0)),
                         (v1.e0*v2.e1 - v1.e1*v2.e0));
@@ -130,6 +127,14 @@ public class Vec3 {
         double z =  RandomNumGen.random_double_within_interval(-1, 1);
         double r =  Math.sqrt(1 - z*z);
         return new Vec3((r*Math.cos(a)), (r*Math.sin(a)), z);
+    }
+
+    static Vec3 randomInUnitDisk(){
+        Vec3 p = new Vec3(RandomNumGen.random_double_within_interval(-1, 1), RandomNumGen.random_double_within_interval(-1, 1), 0);
+        while(p.squared_length() >= 1){
+            p = new Vec3(RandomNumGen.random_double_within_interval(-1, 1), RandomNumGen.random_double_within_interval(-1, 1), 0);
+        }
+        return p;
     }
 
     static Vec3 makeRandomVec(){

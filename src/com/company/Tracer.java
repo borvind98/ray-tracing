@@ -1,37 +1,65 @@
 package com.company;
 
+import java.util.ArrayList;
 import java.util.concurrent.CyclicBarrier;
 
 public class Tracer {
 
     int cores = Runtime.getRuntime().availableProcessors();
-    Hitable[] list;
+    ArrayList<Hitable> list;
     Hitable world;
     Camera cam;
-    RandomNumGen rand;
     Color color;
     int multiSample, imgHeight, imgWidth, maxDepth;
-    double aspectRatio;
 
 
-    Tracer(double aspectRatio, int imgWidth, int imgHeight, int msaa, int maxDepth) {
-        this.aspectRatio = aspectRatio;
+    Tracer(Camera camera, int imgWidth, int imgHeight, int msaa, int maxDepth) {
+        this.cam = camera;
         this.imgHeight = imgHeight;
         this.imgWidth = imgWidth;
         this.multiSample = msaa;
         this.maxDepth = maxDepth;
-        list = new Hitable[4];
 
-        //list[0] = new Sphere(new Vec3(0,0,-1), 0.5, new Dielectrics(new Vec3(0.7, 0.3, 0.3)));
-        list[0] = new Sphere(new Vec3(0, 0, -1), 0.5, new Dielectrics(1.5));
-        list[1] = new Sphere(new Vec3(0, -100.5, -1), 100, new Lambertian(new Vec3(0.8, 0.8, 0.0)));
-        list[2] = new Sphere(new Vec3(1, 0, -1), 0.5, new Metal(new Vec3(0.8, 0.6, 0.2), 1.0));
-        list[3] = new Sphere(new Vec3(-1, 0, -1), 0.5, new Metal(new Vec3(0.8, 0.8, 0.8), 0.3));
-        world = new HitableList(list);
-
-        cam = new Camera(aspectRatio);
-        rand = new RandomNumGen();
         color = new Color(imgWidth, imgHeight);
+        int hitWidth = 10;
+        generateWorld(hitWidth);
+
+    }
+
+    void generateWorld(int hitWidth){
+
+        list = new ArrayList<>();
+        //list[0] = new Sphere(new Vec3(0, 0, -1), 0.5, new Dielectrics(1.5));
+        list.add(new Sphere(new Vec3(0, -1000, 0), 1000, new Lambertian(new Vec3(0.5, 0.5, 0.5))));
+        //list[2] = new Sphere(new Vec3(R, 0, -1), R, new Metal(new Vec3(0.8, 0.6, 0.2), 1.0));
+        //list[3] = new Sphere(new Vec3(-R, 0, -1), R, new Metal(new Vec3(0.8, 0.8, 0.8), 0.3));
+
+        for (int j = -hitWidth; j < hitWidth; j++) {
+            for (int k = -hitWidth; k < hitWidth; k++) {
+                double matChooser = RandomNumGen.random_double();
+                Vec3 center = new Vec3(j+0.9* RandomNumGen.random_double(), 0.2, k+0.9*RandomNumGen.random_double());
+                if(Vec3.vec_minus(center, new Vec3(4, 0.2, 0)).length() > 0.9){
+                    if(matChooser < 0.8){
+                        //diffuse
+                        Vec3 albedo = Vec3.vec_mul(Vec3.makeRandomVec(), Vec3.makeRandomVec());
+                        list.add(new Sphere(center, 0.2, new Lambertian(albedo)));
+                    }
+                    else if(matChooser < 0.95){
+                        //metal
+                        Vec3 albedo = Vec3.makeRandomVecWithMinMax(0.5, 1);
+                        double fuzz = RandomNumGen.random_double_within_interval(0, 0.5);
+                        list.add(new Sphere(center, 0.2, new Metal(albedo, fuzz)));
+                    }
+                    else{
+                        //glass
+                        list.add(new Sphere(center, 0.2, new Dielectrics(1.5)));
+                    }
+                }
+
+
+            }
+        }
+        this.world = new HitableList(list);
     }
 
     void initParallel() {
@@ -86,7 +114,7 @@ public class Tracer {
                     }
 
                     Ray r = cam.getRay(u, v);
-                    pixel_col.add(ray_color(r, world, maxDepth));
+                    pixel_col.add(ray_color(r, this.world, maxDepth));
                 }
 
                 color.setColor(pixel_col, multiSample, j, i);

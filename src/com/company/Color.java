@@ -10,7 +10,6 @@ public class Color {
     // Create buffered image object
     BufferedImage img;
     int imgHeight, imgWidth;
-    Extra ex;
     // file object
     File f;
 
@@ -19,7 +18,6 @@ public class Color {
     Color(int imgWidth, int imgHeight){
         this.imgWidth = imgWidth;
         this.imgHeight = imgHeight;
-        ex = new Extra();
         pixels = new int[imgHeight][imgWidth];
     }
 
@@ -33,9 +31,9 @@ public class Color {
         g = Math.sqrt(scale*g);
         b = Math.sqrt(scale*b);
 
-        int ir = (int) (256.99 * ex.clamp(r, 0.0, 0.999));
-        int ig = (int) (255.99 * ex.clamp(g, 0.0, 0.999));
-        int ib = (int) (255.99 * ex.clamp(b, 0.0, 0.999));
+        int ir = (int) (256.99 * Extra.clamp(r, 0.0, 0.999));
+        int ig = (int) (255.99 * Extra.clamp(g, 0.0, 0.999));
+        int ib = (int) (255.99 * Extra.clamp(b, 0.0, 0.999));
         int a = 255;
 
         int p = (a << 24) | (ir << 16) | (ig << 8) | ib; //pixel
