@@ -31,8 +31,8 @@ public class Tracer {
         list = new ArrayList<>();
         list.add(new Sphere(new Vec3(0, 1, -1), 1, new Dielectrics(1.5)));
         list.add(new Sphere(new Vec3(0, -100000, 0), 100000, new Lambertian(new Vec3(0.5, 0.5, 0.5))));
-        list.add(new Sphere(new Vec3(-2, 1, 0), 1, new Metal(new Vec3(0.8, 0.6, 0.2), 1.0)));
-        list.add(new Sphere(new Vec3(2, 1, -2), 1, new Metal(new Vec3(0.8, 0.8, 0.8), 0.1)));
+        list.add(new Sphere(new Vec3(-2, 1, 0), 1, new Metal(new Vec3(0.8, 0.6, 0.2), 0.5)));
+        list.add(new Sphere(new Vec3(2, 1, -2), 1, new Metal(new Vec3(0.8, 0.8, 0.8), 0.0)));
 
         for (int j = -hitWidth; j < hitWidth; j++) {
             for (int k = -hitWidth; k < hitWidth; k++) {
