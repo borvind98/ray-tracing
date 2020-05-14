@@ -8,6 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Tracer {
 
     int cores = Runtime.getRuntime().availableProcessors();
+    //int cores = 4;
     ArrayList<Hitable> list;
     Hitable world;
     Camera cam;
@@ -33,6 +34,9 @@ public class Tracer {
 
         list = new ArrayList<>();
         list.add(new Sphere(new Vec3(0, 1, -1), 1, new Dielectrics(1.5)));
+        list.add(new Sphere(new Vec3(0, 1.5, -1), 0.8, new Dielectrics(1.5)));
+        list.add(new Sphere(new Vec3(0, 2, -1), 0.6, new Dielectrics(1.5)));
+        list.add(new Sphere(new Vec3(-3, 1, -3), 0.6, new Dielectrics(1.5)));
         list.add(new Sphere(new Vec3(0, -100000, 0), 100000, new Lambertian(new Vec3(0.5, 0.5, 0.5))));
         list.add(new Sphere(new Vec3(-2, 1, 0), 1, new Metal(new Vec3(0.8, 0.6, 0.2), 0.5)));
         list.add(new Sphere(new Vec3(2, 1, -2), 1, new Metal(new Vec3(0.8, 0.8, 0.8), 0.0)));
@@ -42,11 +46,11 @@ public class Tracer {
                 double matChooser = RandomNumGen.random_double();
                 Vec3 center = new Vec3(j + 0.9 * RandomNumGen.random_double(), 0.2, k + 0.9 * RandomNumGen.random_double());
                 if (Vec3.vec_minus(center, new Vec3(4, 0.2, 0)).length() > 0.9) {
-                    if (matChooser < 0.8) {
+                    if (matChooser < 0.75) {
                         //diffuse
                         Vec3 albedo = Vec3.vec_mul(Vec3.makeRandomVec(), Vec3.makeRandomVec());
                         list.add(new Sphere(center, 0.2, new Lambertian(albedo)));
-                    } else if (matChooser < 0.95) {
+                    } else if (matChooser < 0.9) {
                         //metal
                         Vec3 albedo = Vec3.makeRandomVecWithMinMax(0.5, 1);
                         double fuzz = RandomNumGen.random_double_within_interval(0, 0.5);

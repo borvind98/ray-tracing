@@ -7,10 +7,10 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         double aspectRatio = 16.0 / 9.0;
-        int imgHeight = 1080;
+        int imgHeight = 720;
         int imgWidth = (int) (imgHeight * aspectRatio);
-        int msaa = 200;
-        int maxDepth = 200;
+        int msaa = 50;
+        int maxDepth = 10;
         int vfov = 20;
         Vec3 lookFrom = new Vec3(12, 2, 4);
         Vec3 lookAt = new Vec3(0, 1, -1);
@@ -35,7 +35,7 @@ public class Main {
         double raysPerSec = totalAmountOfRays / (rayTime / sec);
 
         if (rayTime > hour) {
-            System.out.println("Raytracing time: " + (int) Math.floor(rayTime / hour) + (int) Math.floor((rayTime % hour) / min) + "min " + (int) Math.floor((rayTime % min) / sec) + "sec");
+            System.out.println("Raytracing time: " + (int) Math.floor(rayTime / hour) + "hours " + (int) Math.floor((rayTime % hour) / min) + "min " + (int) Math.floor((rayTime % min) / sec) + "sec");
         } else if (rayTime > min) {
             System.out.println("Raytracing time: " + (int) Math.floor(rayTime / min) + "min " + (int) Math.floor((rayTime % min) / sec) + "sec");
         } else if (rayTime > sec) {
