@@ -5,13 +5,22 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomNumGen {
 
-    static double random_double(){
+    static double randomDouble(){
         Random random = new Random();
         return random.nextDouble();
 
     }
 
-    static double random_double_within_interval(double rangeMin, double rangeMax){
+    static double randomDouble(double rangeMin, double rangeMax){
         return ThreadLocalRandom.current().nextDouble(rangeMin, rangeMax);
+    }
+
+    static int randomInt(){
+        Random random = new Random();
+        return random.nextInt();
+    }
+
+    static int randomInt(int rangeMin, int rangeMax){
+        return ThreadLocalRandom.current().nextInt(rangeMin, rangeMax);
     }
 }

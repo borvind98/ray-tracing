@@ -9,8 +9,8 @@ public class Main {
         double aspectRatio = 16.0 / 9.0;
         int imgHeight = 720;
         int imgWidth = (int) (imgHeight * aspectRatio);
-        int msaa = 50;
-        int maxDepth = 10;
+        int msaa = 16;
+        int maxDepth = 20;
         int vfov = 20;
         Vec3 lookFrom = new Vec3(12, 2, 4);
         Vec3 lookAt = new Vec3(0, 1, -1);
@@ -18,7 +18,7 @@ public class Main {
         double distToFocus = lookFrom.vecMinus(lookAt).length();
         double aperture = 0.1;
 
-        Camera cam = new Camera(vfov, aspectRatio, lookFrom, lookAt, vUp, distToFocus, aperture);
+        Camera cam = new Camera(vfov, aspectRatio, lookFrom, lookAt, vUp, distToFocus, aperture, 0, 1);
 
         Tracer tracer = new Tracer(cam, imgWidth, imgHeight, msaa, maxDepth);
         double rayStart = System.nanoTime();

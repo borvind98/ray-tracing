@@ -9,8 +9,8 @@ public class Tracer {
 
     int cores = Runtime.getRuntime().availableProcessors();
     //int cores = 4;
-    ArrayList<Hitable> list;
-    Hitable world;
+    ArrayList<Hittable> list;
+    Hittable world;
     Camera cam;
     Color color;
     int multiSample, imgHeight, imgWidth, maxDepth;
@@ -43,8 +43,8 @@ public class Tracer {
 
         for (int j = -hitWidth; j < hitWidth; j++) {
             for (int k = -hitWidth; k < hitWidth; k++) {
-                double matChooser = RandomNumGen.random_double();
-                Vec3 center = new Vec3(j + 0.9 * RandomNumGen.random_double(), 0.2, k + 0.9 * RandomNumGen.random_double());
+                double matChooser = RandomNumGen.randomDouble();
+                Vec3 center = new Vec3(j + 0.9 * RandomNumGen.randomDouble(), 0.2, k + 0.9 * RandomNumGen.randomDouble());
                 if (Vec3.vec_minus(center, new Vec3(4, 0.2, 0)).length() > 0.9) {
                     if (matChooser < 0.75) {
                         //diffuse
@@ -53,7 +53,7 @@ public class Tracer {
                     } else if (matChooser < 0.9) {
                         //metal
                         Vec3 albedo = Vec3.makeRandomVecWithMinMax(0.5, 1);
-                        double fuzz = RandomNumGen.random_double_within_interval(0, 0.5);
+                        double fuzz = RandomNumGen.randomDouble(0, 0.5);
                         list.add(new Sphere(center, 0.2, new Metal(albedo, fuzz)));
                     } else {
                         //glass
@@ -64,7 +64,7 @@ public class Tracer {
 
             }
         }
-        this.world = new HitableList(list);
+        this.world = new HittableList(list);
     }
 
     void initParallel() {
@@ -119,8 +119,8 @@ public class Tracer {
                         u = (double) (index) / (imgWidth - 1);
                         v = (double) (j) / (imgHeight - 1);
                     } else {
-                        u = (index + RandomNumGen.random_double()) / (imgWidth - 1);
-                        v = (j + RandomNumGen.random_double()) / (imgHeight - 1);
+                        u = (index + RandomNumGen.randomDouble()) / (imgWidth - 1);
+                        v = (j + RandomNumGen.randomDouble()) / (imgHeight - 1);
                     }
 
                     Ray r = cam.getRay(u, v);
@@ -136,7 +136,7 @@ public class Tracer {
 
     }
 
-    static Vec3 ray_color(Ray r, Hitable world, int depth) {
+    static Vec3 ray_color(Ray r, Hittable world, int depth) {
         HitRecord rec = new HitRecord();
         if (depth <= 0) {
             return new Vec3(0, 0, 0);

@@ -18,7 +18,7 @@ class Lambertian extends Material{
 
     boolean scatter(Ray rIn, HitRecord rec, Vec3 attenuation, Ray scattered){
         Vec3 scatterDirection = Vec3.vec_plus(rec.normal, Vec3.randomUnitVector());
-        scattered.set(rec.p, scatterDirection);
+        scattered.set(rec.p, scatterDirection, rIn.time());
         attenuation.set(albedo);
         return true;
     }
@@ -75,7 +75,7 @@ class Dielectrics extends Material{
             return true;
         }
         double reflectProb = schlick(cosTheta, etaiOverEtat);
-        if(RandomNumGen.random_double() < reflectProb){
+        if(RandomNumGen.randomDouble() < reflectProb){
             Vec3 reflected = Vec3.reflect(unitDirection, rec.normal);
             scattered.set(rec.p, reflected);
             return true;

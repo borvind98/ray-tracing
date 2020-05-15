@@ -1,6 +1,6 @@
 package com.company;
 
-public class Sphere extends Hitable {
+public class Sphere extends Hittable {
 
     Vec3 center;
     double radius;
@@ -11,11 +11,12 @@ public class Sphere extends Hitable {
         this.radius = r;
         this.material = m;
     }
-
+    @Override
     boolean hit(Ray r, double t_min, double t_max, HitRecord rec) {
         Vec3 oc = Vec3.vec_minus(r.origin(), center);
-        double a = r.direction().dot(r.direction());
-        double b = oc.dot(r.direction());
+        Vec3 dir = r.direction();
+        double a = dir.dot(dir);
+        double b = oc.dot(dir);
         double c = oc.dot(oc) - radius * radius;
         double discriminant = b * b - a * c;
         if (discriminant > 0) {
@@ -39,6 +40,13 @@ public class Sphere extends Hitable {
             }
         }
         return false;
+    }
+
+    @Override
+    boolean boundingBox(double t0, double t1, Aabb outputBox) {
+        outputBox.set(center.vecMinus(new Vec3(radius, radius, radius)),
+                center.vecPlus(new Vec3(radius, radius, radius)));
+        return true;
     }
 }
 

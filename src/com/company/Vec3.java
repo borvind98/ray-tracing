@@ -12,6 +12,12 @@ public class Vec3 {
     double x() { return e0;}
     double y() { return e1;}
     double z() { return e2;}
+    double get(int indx){
+        if(indx == 0) return this.e0;
+        else if(indx == 1) return this.e1;
+        else if(indx == 2) return this.e2;
+        else return 0;
+    }
 
     double length(){
         return Math.sqrt(e0*e0 + e1*e1 + e2*e2);
@@ -162,26 +168,26 @@ public class Vec3 {
     }
 
     static Vec3 randomUnitVector(){
-        double a =  RandomNumGen.random_double_within_interval(0, 2*Math.PI);
-        double z =  RandomNumGen.random_double_within_interval(-1, 1);
+        double a =  RandomNumGen.randomDouble(0, 2*Math.PI);
+        double z =  RandomNumGen.randomDouble(-1, 1);
         double r =  Math.sqrt(1 - z*z);
         return new Vec3((r*Math.cos(a)), (r*Math.sin(a)), z);
     }
 
     static Vec3 randomInUnitDisk(){
-        Vec3 p = new Vec3(RandomNumGen.random_double_within_interval(-1, 1), RandomNumGen.random_double_within_interval(-1, 1), 0);
+        Vec3 p = new Vec3(RandomNumGen.randomDouble(-1, 1), RandomNumGen.randomDouble(-1, 1), 0);
         while(p.squared_length() >= 1){
-            p = new Vec3(RandomNumGen.random_double_within_interval(-1, 1), RandomNumGen.random_double_within_interval(-1, 1), 0);
+            p = new Vec3(RandomNumGen.randomDouble(-1, 1), RandomNumGen.randomDouble(-1, 1), 0);
         }
         return p;
     }
 
     static Vec3 makeRandomVec(){
-        return new Vec3(RandomNumGen.random_double(), RandomNumGen.random_double(), RandomNumGen.random_double());
+        return new Vec3(RandomNumGen.randomDouble(), RandomNumGen.randomDouble(), RandomNumGen.randomDouble());
     }
 
     static Vec3 makeRandomVecWithMinMax(double min, double max){
-        return new Vec3(RandomNumGen.random_double_within_interval(min, max), RandomNumGen.random_double_within_interval(min, max), RandomNumGen.random_double_within_interval(min, max));
+        return new Vec3(RandomNumGen.randomDouble(min, max), RandomNumGen.randomDouble(min, max), RandomNumGen.randomDouble(min, max));
     }
 
     static Vec3 random_in_unit_sphere(){
