@@ -10,12 +10,13 @@ public class Tracer {
     int cores = Runtime.getRuntime().availableProcessors();
     //int cores = 4;
     ArrayList<Hittable> list;
-    Hittable world;
+    HittableList world;
     Camera cam;
     Color color;
     int multiSample, imgHeight, imgWidth, maxDepth;
     ReentrantLock lock;
     ArrayList<Integer> workPool;
+    Bvh boundingVolume;
 
 
     Tracer(Camera camera, int imgWidth, int imgHeight, int msaa, int maxDepth) {
@@ -32,12 +33,20 @@ public class Tracer {
 
     void generateWorld(int hitWidth) {
 
+        Texture checker = new CheckerTexture(new SolidColor(0.2, 0.3, 0.1),
+                new SolidColor(0.9,0.9,0.9));
+
+        Texture perText = new NoiseTexture(5);
+
         list = new ArrayList<>();
         list.add(new Sphere(new Vec3(0, 1, -1), 1, new Dielectrics(1.5)));
         list.add(new Sphere(new Vec3(0, 1.5, -1), 0.8, new Dielectrics(1.5)));
         list.add(new Sphere(new Vec3(0, 2, -1), 0.6, new Dielectrics(1.5)));
         list.add(new Sphere(new Vec3(-3, 1, -3), 0.6, new Dielectrics(1.5)));
-        list.add(new Sphere(new Vec3(0, -100000, 0), 100000, new Lambertian(new Vec3(0.5, 0.5, 0.5))));
+        list.add(new Sphere(new Vec3(2, 1, 2), 0.6, new Lambertian(checker)));
+        //list.add(new Sphere(new Vec3(0, -100000, 0), 100000, new Lambertian(new SolidColor(0.5, 0.5, 0.5))));
+        list.add(new Sphere(new Vec3(0, -100000, 0), 100000, new Lambertian(perText)));
+        //list.add(new Sphere(new Vec3(0, -100000, 0), 100000, new Metal(new Vec3(0.8, 0.4, 0.5), 0.0)));
         list.add(new Sphere(new Vec3(-2, 1, 0), 1, new Metal(new Vec3(0.8, 0.6, 0.2), 0.5)));
         list.add(new Sphere(new Vec3(2, 1, -2), 1, new Metal(new Vec3(0.8, 0.8, 0.8), 0.0)));
 
@@ -45,14 +54,14 @@ public class Tracer {
             for (int k = -hitWidth; k < hitWidth; k++) {
                 double matChooser = RandomNumGen.randomDouble();
                 Vec3 center = new Vec3(j + 0.9 * RandomNumGen.randomDouble(), 0.2, k + 0.9 * RandomNumGen.randomDouble());
-                if (Vec3.vec_minus(center, new Vec3(4, 0.2, 0)).length() > 0.9) {
+                if (center.vecMinus(new Vec3(4, 0.2, 0)).length() > 0.9) {
                     if (matChooser < 0.75) {
                         //diffuse
-                        Vec3 albedo = Vec3.vec_mul(Vec3.makeRandomVec(), Vec3.makeRandomVec());
-                        list.add(new Sphere(center, 0.2, new Lambertian(albedo)));
+                        Vec3 albedo = Vec3.makeRandomVec().vecMul(Vec3.makeRandomVec());
+                        list.add(new Sphere(center, 0.2, new Lambertian(new SolidColor(albedo))));
                     } else if (matChooser < 0.9) {
                         //metal
-                        Vec3 albedo = Vec3.makeRandomVecWithMinMax(0.5, 1);
+                        Vec3 albedo = Vec3.makeRandomVec(0.5, 1);
                         double fuzz = RandomNumGen.randomDouble(0, 0.5);
                         list.add(new Sphere(center, 0.2, new Metal(albedo, fuzz)));
                     } else {
@@ -65,6 +74,7 @@ public class Tracer {
             }
         }
         this.world = new HittableList(list);
+        boundingVolume = new Bvh(world, 0,0);
     }
 
     void initParallel() {
@@ -124,13 +134,13 @@ public class Tracer {
                     }
 
                     Ray r = cam.getRay(u, v);
-                    pixel_col.add(ray_color(r, this.world, maxDepth));
+                    pixel_col.add(ray_color(r, this.boundingVolume, maxDepth));
                 }
 
                 color.setColor(pixel_col, multiSample, j, index);
             }
             scanlinesCalculated++;
-            System.out.println("Thread: " + ind + " | scanlines calculated: " + scanlinesCalculated);
+            System.out.println("Thread: " + ind + " | scanlines calculated: " + scanlinesCalculated + " / " + imgWidth/cores);
         }
 
 
@@ -150,7 +160,7 @@ public class Tracer {
             }
             return new Vec3(0, 0, 0);
         } else {
-            Vec3 unit_direction = Vec3.unit_vector(r.direction());
+            Vec3 unit_direction = Vec3.unitVector(r.direction());
             double t = 0.5 * (unit_direction.y() + 1.0);
             Vec3 v1 = new Vec3(1.0, 1.0, 1.0);
             Vec3 v2 = new Vec3(0.5, 0.7, 1.0);

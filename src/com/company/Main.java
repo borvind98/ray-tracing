@@ -7,12 +7,12 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         double aspectRatio = 16.0 / 9.0;
-        int imgHeight = 720;
+        int imgHeight = 1080;
         int imgWidth = (int) (imgHeight * aspectRatio);
         int msaa = 16;
-        int maxDepth = 20;
-        int vfov = 20;
-        Vec3 lookFrom = new Vec3(12, 2, 4);
+        int maxDepth = 100;
+        int vfov = 30;
+        Vec3 lookFrom = new Vec3(8, 3, 3);
         Vec3 lookAt = new Vec3(0, 1, -1);
         Vec3 vUp = new Vec3(0, 1, 0);
         double distToFocus = lookFrom.vecMinus(lookAt).length();
@@ -32,17 +32,28 @@ public class Main {
         double min = 60000;
         double hour = min * 60;
 
+        double pixelsPerSecond = imgHeight*imgWidth/(rayTime / sec);
+        double scanlinesPerSec = imgWidth /(rayTime / sec);
         double raysPerSec = totalAmountOfRays / (rayTime / sec);
-
+        System.out.println();
         if (rayTime > hour) {
-            System.out.println("Raytracing time: " + (int) Math.floor(rayTime / hour) + "hours " + (int) Math.floor((rayTime % hour) / min) + "min " + (int) Math.floor((rayTime % min) / sec) + "sec");
+            System.out.println("Raytracing time: " + (int) Math.floor(rayTime / hour) + "hours " +
+                    (int) Math.floor((rayTime % hour) / min) + "min " + (int) Math.floor((rayTime % min) / sec) + "sec");
         } else if (rayTime > min) {
-            System.out.println("Raytracing time: " + (int) Math.floor(rayTime / min) + "min " + (int) Math.floor((rayTime % min) / sec) + "sec");
+            System.out.println("Raytracing time: " + (int) Math.floor(rayTime / min) + "min " +
+                    (int) Math.floor((rayTime % min) / sec) + "sec");
         } else if (rayTime > sec) {
-            System.out.println("Raytracing time: " + (int) Math.floor(rayTime / sec) + "sec " + (int) Math.floor(rayTime % sec) + "ms");
+            System.out.println("Raytracing time: " + (int) Math.floor(rayTime / sec) + "sec " +
+                    (int) Math.floor(rayTime % sec) + "ms");
         } else {
             System.out.println("Raytracing time: " + rayTime + "ms");
         }
+        System.out.println();
+        System.out.println("Image size: " + imgWidth +"x"+imgHeight + " MSAA " + msaa + "x");
+        System.out.println("Total amount of pixels: " + imgWidth*imgHeight);
+        System.out.println();
+        System.out.println("Pixels per second: " + pixelsPerSecond);
+        System.out.println("Scanlines per second: " + scanlinesPerSec);
         System.out.println("Average rays per second: " + raysPerSec);
 
 

@@ -20,8 +20,8 @@ public class Camera {
         double halfWidth = aspectRatio * halfHeight;
 
 
-        w = Vec3.unit_vector(lookFrom.vecMinus(lookAt));
-        u = Vec3.unit_vector(vUp.cross(w));
+        w = Vec3.unitVector(lookFrom.vecMinus(lookAt));
+        u = Vec3.unitVector(vUp.cross(w));
         v = w.cross(u);
 
         lower_left_corner = origin.vecMinus(u.vecMulT(halfWidth*focusDist)).vecMinus(v.vecMulT(halfHeight*focusDist)).vecMinus(w.vecMulT(focusDist));

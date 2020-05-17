@@ -163,7 +163,7 @@ public class Vec3 {
         return new Vec3(this.e0 * k, this.e1 * k, this.e2 * k);
     }
 
-    static Vec3 unit_vector(Vec3 v){
+    static Vec3 unitVector(Vec3 v){
         return v.divT(v.length());
     }
 
@@ -186,14 +186,14 @@ public class Vec3 {
         return new Vec3(RandomNumGen.randomDouble(), RandomNumGen.randomDouble(), RandomNumGen.randomDouble());
     }
 
-    static Vec3 makeRandomVecWithMinMax(double min, double max){
+    static Vec3 makeRandomVec(double min, double max){
         return new Vec3(RandomNumGen.randomDouble(min, max), RandomNumGen.randomDouble(min, max), RandomNumGen.randomDouble(min, max));
     }
 
     static Vec3 random_in_unit_sphere(){
-        Vec3 p = Vec3.makeRandomVecWithMinMax(-1, 1);
+        Vec3 p = Vec3.makeRandomVec(-1, 1);
         while(p.squared_length() >= 1){
-            p = Vec3.makeRandomVecWithMinMax(-1, 1);
+            p = Vec3.makeRandomVec(-1, 1);
         }
         return p;
     }

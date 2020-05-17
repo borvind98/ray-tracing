@@ -8,8 +8,8 @@ public class Bvh extends Hittable {
     Hittable right;
     Aabb box;
 
-    Bvh(HittableList list, double time0, double time1){
-        new Bvh(list.list, 0, list.list.size(), time0, time1);
+    Bvh(HittableList list, double time0, double time1) {
+        this(list.list, 0, list.list.size(), time0, time1);
     }
     Bvh(ArrayList<Hittable> objectList, int start, int end, double time0, double time1){
         int axis = RandomNumGen.randomInt(0,2);
@@ -28,6 +28,7 @@ public class Bvh extends Hittable {
                 right = objectList.get(start+1);
             }
             else{
+                //TODO: sorter objectlist basert på comparator
                 left = objectList.get(start+1);
                 right = objectList.get(start);
             }
@@ -69,13 +70,13 @@ public class Bvh extends Hittable {
 
     boolean compare(Hittable a, Hittable b, int axis){
         if(axis == 0){
-            return boxXCompare(left, right);
+            return boxXCompare(a, b);
         }
         else if(axis == 1){
-            return boxYCompare(left, right);
+            return boxYCompare(a, b);
         }
         else{
-            return boxZCompare(left, right);
+            return boxZCompare(a, b);
         }
     }
 

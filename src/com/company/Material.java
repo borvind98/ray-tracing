@@ -10,16 +10,16 @@ public abstract class Material {
 
 class Lambertian extends Material{
 
-    Vec3 albedo;
+    Texture albedo;
 
-    Lambertian(Vec3 col){
+    Lambertian(Texture col){
         this.albedo = col;
     }
 
     boolean scatter(Ray rIn, HitRecord rec, Vec3 attenuation, Ray scattered){
         Vec3 scatterDirection = Vec3.vec_plus(rec.normal, Vec3.randomUnitVector());
         scattered.set(rec.p, scatterDirection, rIn.time());
-        attenuation.set(albedo);
+        attenuation.set(albedo.value(rec.u, rec.v, rec.p));
         return true;
     }
 
@@ -42,7 +42,7 @@ class Metal extends Material{
     }
 
     boolean scatter(Ray rIn, HitRecord rec, Vec3 attenuation, Ray scattered){
-        Vec3 reflected = Vec3.reflect(Vec3.unit_vector(rIn.direction()), rec.normal);
+        Vec3 reflected = Vec3.reflect(Vec3.unitVector(rIn.direction()), rec.normal);
         scattered.set(rec.p, Vec3.vec_plus(reflected, Vec3.vec_mul_t(Vec3.randomUnitVector(), fuzz)));
         attenuation.set(albedo);
         return (scattered.direction().dot(rec.normal) > 0);
@@ -66,7 +66,7 @@ class Dielectrics extends Material{
             etaiOverEtat = 1.0 / refIdx;
         }
 
-        Vec3 unitDirection = Vec3.unit_vector(rIn.direction());
+        Vec3 unitDirection = Vec3.unitVector(rIn.direction());
         double cosTheta = Math.min(new Vec3(0,0,0).vecMinus(unitDirection).dot(rec.normal), 1.0);
         double sinTheta = Math.sqrt(1.0f - cosTheta*cosTheta);
         if(etaiOverEtat * sinTheta > 1.0){
